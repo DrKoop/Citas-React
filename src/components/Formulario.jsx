@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
 import Error from "./Error"
 
-const Formulario = ({dataPacientes,setDataPacientes}) => {
+const Formulario = ({dataPacientes,setDataPacientes, paciente,setPaciente}) => {
+
 
   const [ nombre, setNombre ] = useState('')
   const [ propietario, setPropietario ] = useState('')
@@ -11,6 +12,24 @@ const Formulario = ({dataPacientes,setDataPacientes}) => {
 
   //Manejo de Errores
   const [ error, setError ] = useState(false)
+
+  useEffect(() => {
+
+    if( Object.keys(paciente).length > 0 ){
+
+      const { nombre, propietario, email, fecha, sintomas } = paciente
+
+      setNombre( nombre )
+      setPropietario( propietario )
+      setEmail( email )
+      setFecha( fecha )
+      setSintomas( sintomas )
+    }
+
+  }, [paciente])
+
+
+
 
   const generarID = () => {
     const random = Math.random().toString(36).substr(2);
@@ -33,13 +52,26 @@ const Formulario = ({dataPacientes,setDataPacientes}) => {
         propietario,
         email,
         fecha,
-        sintomas,
-        id : generarID()
+        sintomas
       }
 
-      
 
-      setDataPacientes([ ...dataPacientes, objetoPaciente ])
+      if( paciente.id ){
+        //Editando el registro (Al pulsar el Button)
+        objetoPaciente.id = paciente.id
+
+
+        //ACTUALIZAR PACIENTES
+        const pacientesActualizados = dataPacientes.map( pacienteState => pacienteState.id === paciente.id ? objetoPaciente : pacienteState )
+
+        setDataPacientes( pacientesActualizados )
+        setPaciente({})
+
+      }else{
+        //Nuevo registro (Al pulsar el Button)
+        objetoPaciente.id = generarID()
+        setDataPacientes([ ...dataPacientes, objetoPaciente ])
+      }
 
       //Reiniciando el Formulairo una vez que paso la validacion y se asignaron los Datos
       setNombre('')
@@ -145,7 +177,7 @@ const Formulario = ({dataPacientes,setDataPacientes}) => {
 
         <input 
           type="submit"
-          value="agregar Paciente"
+          value={ paciente.id ? 'Editar Paciente' : "Agregar Paciente" }
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors rounded-md"
           />
       </form>

@@ -1,6 +1,8 @@
+
 import Paciente from "./Paciente"
 
-const ListadoPacientes = ({dataPacientes, setPaciente}) => {
+const ListadoPacientes = ({dataPacientes, setPaciente, eliminarPaciente}) => {
+
 
 
 
@@ -23,13 +25,14 @@ const ListadoPacientes = ({dataPacientes, setPaciente}) => {
                     key={ paciente.id }
                     paciente={paciente}
                     setPaciente={ setPaciente }
+                    eliminarPaciente={eliminarPaciente}
                   />
                 ))
               }
         </>
       ) : (
         <>
-              <h2 className="font-black text-3xl text-center">Mo Hay Pacientes</h2>
+              <h2 className="font-black text-3xl text-center">No Hay Pacientes</h2>
 
               <p className="text-xl mt-5 mb-10 text-center">
                 Comienza Agregando Pacientes {' '}
